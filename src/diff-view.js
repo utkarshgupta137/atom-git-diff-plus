@@ -1,5 +1,6 @@
-const { CompositeDisposable } = require('atom');
-const { repositoryForPath } = require('./helpers');
+const { CompositeDisposable } = require("atom");
+
+const { repositoryForPath } = require("./helpers.js");
 
 const MAX_BUFFER_LENGTH_TO_DIFF = 2 * 1024 * 1024;
 
@@ -21,16 +22,21 @@ module.exports = class DiffView {
       this.editor.onDidStopChanging(this.updateDiffs),
       this.editor.onDidChangePath(this.updateDiffs),
       atom.project.onDidChangePaths(() => this.subscribeToRepository()),
-      atom.commands.add(editorElement, 'atom-git-diff-plus:move-to-next-diff', () =>
-        this.moveToNextDiff()
+      atom.commands.add(
+        editorElement,
+        "atom-git-diff-plus:move-to-next-diff",
+        () => this.moveToNextDiff()
       ),
-      atom.commands.add(editorElement, 'atom-git-diff-plus:move-to-previous-diff', () =>
-        this.moveToPreviousDiff()
+      atom.commands.add(
+        editorElement,
+        "atom-git-diff-plus:move-to-previous-diff",
+        () => this.moveToPreviousDiff()
       ),
-      atom.config.onDidChange('atom-git-diff-plus.showIconsInEditorGutter', () =>
-        this.updateIconDecoration()
+      atom.config.onDidChange(
+        "atom-git-diff-plus.showIconsInEditorGutter",
+        () => this.updateIconDecoration()
       ),
-      atom.config.onDidChange('editor.showLineNumbers', () =>
+      atom.config.onDidChange("editor.showLineNumbers", () =>
         this.updateIconDecoration()
       ),
       editorElement.onDidAttach(() => this.updateIconDecoration()),
@@ -63,7 +69,7 @@ module.exports = class DiffView {
 
     // Wrap around to the first diff in the file
     if (
-      atom.config.get('atom-git-diff-plus.wrapAroundOnMoveToDiff') &&
+      atom.config.get("atom-git-diff-plus.wrapAroundOnMoveToDiff") &&
       nextDiffLineNumber == null
     ) {
       nextDiffLineNumber = firstDiffLineNumber;
@@ -73,15 +79,15 @@ module.exports = class DiffView {
   }
 
   updateIconDecoration() {
-    const gutter = this.editor.getElement().querySelector('.gutter');
+    const gutter = this.editor.getElement().querySelector(".gutter");
     if (gutter) {
       if (
-        atom.config.get('editor.showLineNumbers') &&
-        atom.config.get('atom-git-diff-plus.showIconsInEditorGutter')
+        atom.config.get("editor.showLineNumbers") &&
+        atom.config.get("atom-git-diff-plus.showIconsInEditorGutter")
       ) {
-        gutter.classList.add('git-diff-icon');
+        gutter.classList.add("git-diff-icon");
       } else {
-        gutter.classList.remove('git-diff-icon');
+        gutter.classList.remove("git-diff-icon");
       }
     }
   }
@@ -104,7 +110,7 @@ module.exports = class DiffView {
 
     // Wrap around to the last diff in the file
     if (
-      atom.config.get('atom-git-diff-plus.wrapAroundOnMoveToDiff') &&
+      atom.config.get("atom-git-diff-plus.wrapAroundOnMoveToDiff") &&
       previousDiffLineNumber === -1
     ) {
       previousDiffLineNumber = lastDiffLineNumber;
@@ -129,7 +135,7 @@ module.exports = class DiffView {
         })
       );
       this.subscriptions.add(
-        this.repository.onDidChangeStatus(changedPath => {
+        this.repository.onDidChangeStatus((changedPath) => {
           if (changedPath === this.editor.getPath()) this.scheduleUpdate();
         })
       );
@@ -165,15 +171,15 @@ module.exports = class DiffView {
       const startRow = newStart - 1;
       const endRow = newStart + newLines - 1;
       if (oldLines === 0 && newLines > 0) {
-        this.markRange(startRow, endRow, 'git-line-added');
+        this.markRange(startRow, endRow, "git-line-added");
       } else if (newLines === 0 && oldLines > 0) {
         if (startRow < 0) {
-          this.markRange(0, 0, 'git-previous-line-removed');
+          this.markRange(0, 0, "git-previous-line-removed");
         } else {
-          this.markRange(startRow, startRow, 'git-line-removed');
+          this.markRange(startRow, startRow, "git-line-removed");
         }
       } else {
-        this.markRange(startRow, endRow, 'git-line-modified');
+        this.markRange(startRow, endRow, "git-line-modified");
       }
     }
   }
@@ -184,10 +190,16 @@ module.exports = class DiffView {
   }
 
   markRange(startRow, endRow, klass) {
-    const marker = this.editor.markBufferRange([[startRow, 0], [endRow, 0]], {
-      invalidate: 'never'
-    });
-    this.editor.decorateMarker(marker, { type: 'line-number', class: klass });
+    const marker = this.editor.markBufferRange(
+      [
+        [startRow, 0],
+        [endRow, 0],
+      ],
+      {
+        invalidate: "never",
+      }
+    );
+    this.editor.decorateMarker(marker, { type: "line-number", class: klass });
     this.markers.push(marker);
   }
 };
