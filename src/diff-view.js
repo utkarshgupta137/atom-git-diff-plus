@@ -3,7 +3,7 @@ const { repositoryForPath } = require('./helpers');
 
 const MAX_BUFFER_LENGTH_TO_DIFF = 2 * 1024 * 1024;
 
-module.exports = class GitDiffView {
+module.exports = class DiffView {
   constructor(editor) {
     this.updateDiffs = this.updateDiffs.bind(this);
     this.editor = editor;
@@ -21,13 +21,13 @@ module.exports = class GitDiffView {
       this.editor.onDidStopChanging(this.updateDiffs),
       this.editor.onDidChangePath(this.updateDiffs),
       atom.project.onDidChangePaths(() => this.subscribeToRepository()),
-      atom.commands.add(editorElement, 'git-diff:move-to-next-diff', () =>
+      atom.commands.add(editorElement, 'atom-git-diff-plus:move-to-next-diff', () =>
         this.moveToNextDiff()
       ),
-      atom.commands.add(editorElement, 'git-diff:move-to-previous-diff', () =>
+      atom.commands.add(editorElement, 'atom-git-diff-plus:move-to-previous-diff', () =>
         this.moveToPreviousDiff()
       ),
-      atom.config.onDidChange('git-diff.showIconsInEditorGutter', () =>
+      atom.config.onDidChange('atom-git-diff-plus.showIconsInEditorGutter', () =>
         this.updateIconDecoration()
       ),
       atom.config.onDidChange('editor.showLineNumbers', () =>
@@ -63,7 +63,7 @@ module.exports = class GitDiffView {
 
     // Wrap around to the first diff in the file
     if (
-      atom.config.get('git-diff.wrapAroundOnMoveToDiff') &&
+      atom.config.get('atom-git-diff-plus.wrapAroundOnMoveToDiff') &&
       nextDiffLineNumber == null
     ) {
       nextDiffLineNumber = firstDiffLineNumber;
@@ -77,7 +77,7 @@ module.exports = class GitDiffView {
     if (gutter) {
       if (
         atom.config.get('editor.showLineNumbers') &&
-        atom.config.get('git-diff.showIconsInEditorGutter')
+        atom.config.get('atom-git-diff-plus.showIconsInEditorGutter')
       ) {
         gutter.classList.add('git-diff-icon');
       } else {
@@ -104,7 +104,7 @@ module.exports = class GitDiffView {
 
     // Wrap around to the last diff in the file
     if (
-      atom.config.get('git-diff.wrapAroundOnMoveToDiff') &&
+      atom.config.get('atom-git-diff-plus.wrapAroundOnMoveToDiff') &&
       previousDiffLineNumber === -1
     ) {
       previousDiffLineNumber = lastDiffLineNumber;

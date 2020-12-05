@@ -1,0 +1,26 @@
+{
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Git Diff",
+          "submenu": [
+            {
+              "command": "atom-git-diff-plus:move-to-next-diff",
+              "label": "Move to Next Diff"
+            },
+            {
+              "command": "atom-git-diff-plus:move-to-previous-diff",
+              "label": "Move to Previous Diff"
+            },
+            {
+              "command": "atom-git-diff-plus:toggle-diff-list",
+              "label": "Toggle Diff List"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

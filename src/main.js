@@ -1,5 +1,5 @@
-const GitDiffView = require('./git-diff-view');
 const DiffListView = require('./diff-list-view');
+const DiffView = require('./diff-view');
 
 let diffListView = null;
 
@@ -23,10 +23,10 @@ module.exports = {
     atom.workspace.observeTextEditors(editor => {
       if (watchedEditors.has(editor)) return;
 
-      new GitDiffView(editor).start();
+      new DiffView(editor).start();
       atom.commands.add(
         atom.views.getView(editor),
-        'git-diff:toggle-diff-list',
+        'atom-git-diff-plus:toggle-diff-list',
         () => {
           if (diffListView == null) diffListView = new DiffListView();
           diffListView.toggle();

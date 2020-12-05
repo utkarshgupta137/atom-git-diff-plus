@@ -1,0 +1,7 @@
+{
+  "atom-text-editor": {
+    "alt-g up": "atom-git-diff-plus:move-to-previous-diff",
+    "alt-g down": "atom-git-diff-plus:move-to-next-diff",
+    "alt-g d": "atom-git-diff-plus:toggle-diff-list"
+  }
+}
