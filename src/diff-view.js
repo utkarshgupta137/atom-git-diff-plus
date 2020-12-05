@@ -46,11 +46,15 @@ class DiffView {
         this.scheduleUpdate();
       }),
       this.editor.onDidDestroy(() => {
-        this.cancelUpdate();
-        this.removeMarkers();
-        this.subscriptions.dispose();
+        this.destroy();
       })
     );
+  }
+
+  destroy() {
+    this.cancelUpdate();
+    this.removeMarkers();
+    this.subscriptions.dispose();
   }
 
   updateIconDecoration() {

@@ -1,3 +1,5 @@
+const { CompositeDisposable } = require("atom");
+
 const DiffListView = require("./diff-list-view.js");
 const DiffView = require("./diff-view.js");
 
@@ -7,49 +9,47 @@ const config = {
     default: false,
     description:
       "Show colored icons for added (`+`), modified (`·`) and removed (`-`) lines in the editor's gutter, instead of colored markers (`|`).",
+    order: 1,
   },
   wrapAroundOnMoveToDiff: {
     type: "boolean",
     default: true,
     description:
       "Wraps around to the first/last diff in the file when moving to next/previous diff.",
+    order: 2,
   },
 };
 
+const subscriptions = new CompositeDisposable();
+let views = [];
 let diffListView = null;
 
 function activate() {
-  const watchedEditors = new WeakSet();
+  diffListView = new DiffListView();
 
-  atom.workspace.observeTextEditors((editor) => {
-    if (watchedEditors.has(editor)) {
-      return;
-    }
-
-    new DiffView(editor).start();
+  subscriptions.add(
     atom.commands.add(
-      atom.views.getView(editor),
+      "atom-text-editor:not([mini])",
       "atom-git-diff-plus:toggle-diff-list",
       () => {
-        if (diffListView == null) {
-          diffListView = new DiffListView();
-        }
         diffListView.toggle();
       }
-    );
-
-    watchedEditors.add(editor);
-    editor.onDidDestroy(() => {
-      return watchedEditors.delete(editor);
-    });
-  });
+    ),
+    atom.workspace.observeTextEditors((editor) => {
+      views.push(new DiffView(editor));
+    })
+  );
 }
 
 function deactivate() {
-  if (diffListView) {
-    diffListView.destroy();
-  }
-  diffListView = null;
+  diffListView.destroy();
+
+  views.forEach((view) => {
+    view.destroy();
+  });
+  views = [];
+
+  subscriptions.dispose();
 }
 
 module.exports = {
