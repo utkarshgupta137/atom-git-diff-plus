@@ -1,0 +1,10 @@
+{
+  "extends": ["standard", "airbnb-base", "atomic"],
+  "ignorePatterns": ["dist/", "node_modules/"],
+  "rules": {
+    "import/no-unresolved": [
+      "error",
+      { "commonjs": true, "caseSensitive": true, "ignore": ["atom"] }
+    ]
+  }
+}
