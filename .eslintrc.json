@@ -2,9 +2,21 @@
   "extends": ["standard", "airbnb-base", "atomic"],
   "ignorePatterns": ["dist/", "node_modules/"],
   "rules": {
+    "arrow-body-style": ["error", "always"],
+    "curly": ["error", "all"],
     "import/no-unresolved": [
       "error",
-      { "commonjs": true, "caseSensitive": true, "ignore": ["atom"] }
+      {
+        "caseSensitive": true,
+        "commonjs": true,
+        "ignore": ["atom"]
+      }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
     ]
   }
 }

@@ -21,25 +21,35 @@ module.exports = class DiffView {
     this.subscriptions.add(
       this.editor.onDidStopChanging(this.updateDiffs),
       this.editor.onDidChangePath(this.updateDiffs),
-      atom.project.onDidChangePaths(() => this.subscribeToRepository()),
+      atom.project.onDidChangePaths(() => {
+        this.subscribeToRepository();
+      }),
       atom.commands.add(
         editorElement,
         "atom-git-diff-plus:move-to-next-diff",
-        () => this.moveToNextDiff()
+        () => {
+          this.moveToNextDiff();
+        }
       ),
       atom.commands.add(
         editorElement,
         "atom-git-diff-plus:move-to-previous-diff",
-        () => this.moveToPreviousDiff()
+        () => {
+          this.moveToPreviousDiff();
+        }
       ),
       atom.config.onDidChange(
         "atom-git-diff-plus.showIconsInEditorGutter",
-        () => this.updateIconDecoration()
+        () => {
+          this.updateIconDecoration();
+        }
       ),
-      atom.config.onDidChange("editor.showLineNumbers", () =>
-        this.updateIconDecoration()
-      ),
-      editorElement.onDidAttach(() => this.updateIconDecoration()),
+      atom.config.onDidChange("editor.showLineNumbers", () => {
+        this.updateIconDecoration();
+      }),
+      editorElement.onDidAttach(() => {
+        this.updateIconDecoration();
+      }),
       this.editor.onDidDestroy(() => {
         this.cancelUpdate();
         this.removeDecorations();
@@ -56,15 +66,19 @@ module.exports = class DiffView {
     let nextDiffLineNumber = null;
     let firstDiffLineNumber = null;
     if (this.diffs) {
-      for (const { newStart } of this.diffs) {
+      this.diffs.forEach(({ newStart }) => {
         if (newStart > cursorLineNumber) {
-          if (nextDiffLineNumber == null) nextDiffLineNumber = newStart - 1;
+          if (nextDiffLineNumber == null) {
+            nextDiffLineNumber = newStart - 1;
+          }
           nextDiffLineNumber = Math.min(newStart - 1, nextDiffLineNumber);
         }
 
-        if (firstDiffLineNumber == null) firstDiffLineNumber = newStart - 1;
+        if (firstDiffLineNumber == null) {
+          firstDiffLineNumber = newStart - 1;
+        }
         firstDiffLineNumber = Math.min(newStart - 1, firstDiffLineNumber);
-      }
+      });
     }
 
     // Wrap around to the first diff in the file
@@ -97,7 +111,7 @@ module.exports = class DiffView {
     let previousDiffLineNumber = -1;
     let lastDiffLineNumber = -1;
     if (this.diffs) {
-      for (const { newStart } of this.diffs) {
+      this.diffs.forEach(({ newStart }) => {
         if (newStart < cursorLineNumber) {
           previousDiffLineNumber = Math.max(
             newStart - 1,
@@ -105,7 +119,7 @@ module.exports = class DiffView {
           );
         }
         lastDiffLineNumber = Math.max(newStart - 1, lastDiffLineNumber);
-      }
+      });
     }
 
     // Wrap around to the last diff in the file
@@ -136,7 +150,9 @@ module.exports = class DiffView {
       );
       this.subscriptions.add(
         this.repository.onDidChangeStatus((changedPath) => {
-          if (changedPath === this.editor.getPath()) this.scheduleUpdate();
+          if (changedPath === this.editor.getPath()) {
+            this.scheduleUpdate();
+          }
         })
       );
     }
@@ -152,7 +168,9 @@ module.exports = class DiffView {
   }
 
   updateDiffs() {
-    if (this.editor.isDestroyed()) return;
+    if (this.editor.isDestroyed()) {
+      return;
+    }
     this.removeDecorations();
     const path = this.editor && this.editor.getPath();
     if (
@@ -162,12 +180,14 @@ module.exports = class DiffView {
       this.diffs =
         this.repository &&
         this.repository.getLineDiffs(path, this.editor.getText());
-      if (this.diffs) this.addDecorations(this.diffs);
+      if (this.diffs) {
+        this.addDecorations(this.diffs);
+      }
     }
   }
 
   addDecorations(diffs) {
-    for (const { newStart, oldLines, newLines } of diffs) {
+    diffs.forEach(({ newStart, oldLines, newLines }) => {
       const startRow = newStart - 1;
       const endRow = newStart + newLines - 1;
       if (oldLines === 0 && newLines > 0) {
@@ -181,11 +201,13 @@ module.exports = class DiffView {
       } else {
         this.markRange(startRow, endRow, "git-line-modified");
       }
-    }
+    });
   }
 
   removeDecorations() {
-    for (let marker of this.markers) marker.destroy();
+    this.markers.forEach((marker) => {
+      marker.destroy();
+    });
     this.markers = [];
   }
 

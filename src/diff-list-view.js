@@ -7,7 +7,9 @@ module.exports = class DiffListView {
     this.selectListView = new SelectListView({
       emptyMessage: "No diffs in file",
       items: [],
-      filterKeyForItem: (diff) => diff.lineText,
+      filterKeyForItem: (diff) => {
+        return diff.lineText;
+      },
       elementForItem: (diff) => {
         const li = document.createElement("li");
         li.classList.add("two-lines");
@@ -74,12 +76,14 @@ module.exports = class DiffListView {
       let diffs = repository
         ? repository.getLineDiffs(this.editor.getPath(), this.editor.getText())
         : [];
-      if (!diffs) diffs = [];
-      for (let diff of diffs) {
+      if (!diffs) {
+        diffs = [];
+      }
+      diffs.forEach((diff) => {
         const bufferRow = diff.newStart > 0 ? diff.newStart - 1 : diff.newStart;
         const lineText = this.editor.lineTextForBufferRow(bufferRow);
         diff.lineText = lineText ? lineText.trim() : "";
-      }
+      });
 
       await this.selectListView.update({ items: diffs });
       this.attach();

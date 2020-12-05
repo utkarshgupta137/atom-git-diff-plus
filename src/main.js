@@ -23,25 +23,33 @@ module.exports = {
     const watchedEditors = new WeakSet();
 
     atom.workspace.observeTextEditors((editor) => {
-      if (watchedEditors.has(editor)) return;
+      if (watchedEditors.has(editor)) {
+        return;
+      }
 
       new DiffView(editor).start();
       atom.commands.add(
         atom.views.getView(editor),
         "atom-git-diff-plus:toggle-diff-list",
         () => {
-          if (diffListView == null) diffListView = new DiffListView();
+          if (diffListView == null) {
+            diffListView = new DiffListView();
+          }
           diffListView.toggle();
         }
       );
 
       watchedEditors.add(editor);
-      editor.onDidDestroy(() => watchedEditors.delete(editor));
+      editor.onDidDestroy(() => {
+        return watchedEditors.delete(editor);
+      });
     });
   },
 
   deactivate() {
-    if (diffListView) diffListView.destroy();
+    if (diffListView) {
+      diffListView.destroy();
+    }
     diffListView = null;
   },
 };
