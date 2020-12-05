@@ -4,7 +4,7 @@ const { repositoryForPath } = require("./helpers.js");
 
 const MAX_BUFFER_LENGTH_TO_DIFF = 2 * 1024 * 1024;
 
-module.exports = class DiffView {
+class DiffView {
   constructor(editor) {
     this.updateDiffs = this.updateDiffs.bind(this);
     this.editor = editor;
@@ -224,4 +224,6 @@ module.exports = class DiffView {
     this.editor.decorateMarker(marker, { type: "line-number", class: klass });
     this.markers.push(marker);
   }
-};
+}
+
+module.exports = DiffView;

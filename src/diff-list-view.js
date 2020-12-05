@@ -2,7 +2,7 @@ const SelectListView = require("atom-select-list");
 
 const { repositoryForPath } = require("./helpers.js");
 
-module.exports = class DiffListView {
+class DiffListView {
   constructor() {
     this.selectListView = new SelectListView({
       emptyMessage: "No diffs in file",
@@ -89,4 +89,6 @@ module.exports = class DiffListView {
       this.attach();
     }
   }
-};
+}
+
+module.exports = DiffListView;

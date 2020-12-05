@@ -4,6 +4,13 @@
   "rules": {
     "arrow-body-style": ["error", "always"],
     "curly": ["error", "all"],
+    "func-style": [
+      "error",
+      "declaration",
+      {
+        "allowArrowFunctions": true
+      }
+    ],
     "import/no-unresolved": [
       "error",
       {
