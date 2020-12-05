@@ -1,16 +1,16 @@
-@import "syntax-variables";
-@import "octicon-utf-codes";
 @import "octicon-mixins";
+@import "octicon-utf-codes";
+@import "syntax-variables";
 
 atom-text-editor {
   .gutter .line-number {
-    &.git-line-modified {
-      border-left: 2px solid @syntax-color-modified;
+    &.git-line-added {
+      border-left: 2px solid @syntax-color-added;
       padding-left: ~"calc(0.5em - 2px)";
     }
 
-    &.git-line-added {
-      border-left: 2px solid @syntax-color-added;
+    &.git-line-modified {
+      border-left: 2px solid @syntax-color-modified;
       padding-left: ~"calc(0.5em - 2px)";
     }
 
@@ -38,7 +38,7 @@ atom-text-editor {
 
   .gutter.git-diff-icon .line-number {
     border-left-width: 0;
-    padding-left: 1.4em; // space for diff icon
+    padding-left: 1.4em;
 
     &:before {
       .octicon-font();
@@ -47,14 +47,9 @@ atom-text-editor {
       position: absolute;
       top: 0.2em;
       left: 0.4em;
-      height: 0px; // make sure it doesnt affect the gutter line height.
+      height: 0px;
       width: 1em;
       font-size: 0.75em;
-    }
-
-    &.git-line-modified:before {
-      content: @primitive-dot;
-      color: @syntax-color-modified;
     }
 
     &.git-line-added:before {
@@ -62,9 +57,14 @@ atom-text-editor {
       color: @syntax-color-added;
     }
 
+    &.git-line-modified:before {
+      content: @primitive-dot;
+      color: @syntax-color-modified;
+    }
+
     &.git-line-removed:before,
     &.git-previous-line-removed:before {
-      border: none; // reset triangle
+      border: none;
       content: @dash;
       color: @syntax-color-removed;
     }

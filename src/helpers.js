@@ -10,4 +10,11 @@ function repositoryForPath(goalPath) {
   return null;
 }
 
-module.exports = { repositoryForPath };
+function moveToLineNumber(editor, lineNumber) {
+  if (lineNumber && lineNumber !== -Infinity && lineNumber !== Infinity) {
+    editor.setCursorBufferPosition([lineNumber, 0]);
+    editor.moveToFirstCharacterOfLine();
+  }
+}
+
+module.exports = { moveToLineNumber, repositoryForPath };

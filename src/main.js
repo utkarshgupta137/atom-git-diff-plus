@@ -2,7 +2,7 @@ const DiffListView = require("./diff-list-view.js");
 const DiffView = require("./diff-view.js");
 
 const config = {
-  showIconsInEditorGutter: {
+  showIcons: {
     type: "boolean",
     default: false,
     description:
