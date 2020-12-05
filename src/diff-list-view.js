@@ -74,7 +74,7 @@ class DiffListView {
     if (activeEditor) {
       this.editor = activeEditor;
 
-      const repository = helpers.repositoryForPath(this.editor.getPath());
+      const repository = await helpers.repositoryForEditor(this.editor);
       let diffs =
         repository &&
         repository.getLineDiffs(this.editor.getPath(), this.editor.getText());

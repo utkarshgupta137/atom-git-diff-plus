@@ -16,9 +16,6 @@ class DiffView {
 
     const editorElement = this.editor.getElement();
     this.subscriptions.add(
-      atom.project.onDidChangePaths(() => {
-        this.subscribeToRepository();
-      }),
       atom.config.observe("editor.showLineNumbers", () => {
         this.updateIconDecoration();
       }),
@@ -40,7 +37,7 @@ class DiffView {
         }
       ),
       this.editor.onDidChangePath(() => {
-        this.scheduleUpdate();
+        this.subscribeToRepository();
       }),
       this.editor.onDidStopChanging(() => {
         this.scheduleUpdate();
@@ -133,8 +130,8 @@ class DiffView {
     clearImmediate(this.immediateId);
   }
 
-  subscribeToRepository() {
-    this.repository = helpers.repositoryForPath(this.editor.getPath());
+  async subscribeToRepository() {
+    this.repository = await helpers.repositoryForEditor(this.editor);
     if (this.repository) {
       this.scheduleUpdate();
       this.subscriptions.add(

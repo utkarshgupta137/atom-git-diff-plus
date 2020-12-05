@@ -1,11 +1,8 @@
-function repositoryForPath(goalPath) {
-  const directories = atom.project.getDirectories();
-  const repositories = atom.project.getRepositories();
-  for (let i = 0; i < directories.length; i++) {
-    const directory = directories[i];
-    if (goalPath === directory.getPath() || directory.contains(goalPath)) {
-      return repositories[i];
-    }
+const { Directory } = require("atom");
+
+async function repositoryForEditor(editor) {
+  if (editor) {
+    return atom.project.repositoryForDirectory(new Directory(editor.getPath()));
   }
   return null;
 }
@@ -17,4 +14,4 @@ function moveToLineNumber(editor, lineNumber) {
   }
 }
 
-module.exports = { moveToLineNumber, repositoryForPath };
+module.exports = { moveToLineNumber, repositoryForEditor };
