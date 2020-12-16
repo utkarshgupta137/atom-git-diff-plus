@@ -1,6 +1,6 @@
 {
   "name": "atom-git-diff-plus",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "./src/main.js",
   "license": "MIT",
   "author": "Utkarsh Gupta <utkarshgupta137@gmail.com>",
