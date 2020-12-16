@@ -5,9 +5,12 @@
   "license": "MIT",
   "author": "Utkarsh Gupta <utkarshgupta137@gmail.com>",
   "repository": "https://github.com/utkarshgupta137/atom-git-diff-plus",
-  "description": "TODO",
+  "description": "A replacement for the in-built git-diff package with some nice additions",
   "keywords": [
-    "TODO"
+    "atom",
+    "diff",
+    "git",
+    "plus"
   ],
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
